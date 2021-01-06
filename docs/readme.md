@@ -1,4 +1,4 @@
-# Deep Learning NLU Project
+# Home
 
 This is a site documenting my solution to Prof. Vu's deep learning coding challenge at University of Stuttgart in 2020/21.
 
