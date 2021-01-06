@@ -1,5 +1,6 @@
 # Script overview
 ## cross_validation.py
+```
 Usage: cross_validation.py [OPTIONS]
 
   Perform a k-fold cross-validation on one or multiple configurations. The
@@ -10,7 +11,9 @@ Options:
   -d, --data TEXT      File or directory containing the training data
   --help               Show this message and exit.
 
+```
 ## inference.py
+```
 Usage: inference.py [OPTIONS]
 
 Options:
@@ -19,7 +22,9 @@ Options:
   -m, --model TEXT  Path to the trained model, defaults to the latest model
   --help            Show this message and exit.
 
+```
 ## train.py
+```
 Usage: train.py [OPTIONS]
 
 Options:
@@ -27,7 +32,9 @@ Options:
   -d, --data TEXT    File or directory containing the training data
   --help             Show this message and exit.
 
+```
 ## transform_data.py
+```
 Usage: transform_data.py [OPTIONS]
 
 Options:
@@ -39,7 +46,9 @@ Options:
   -s, --save-check   Save check results to disk
   --help             Show this message and exit.
 
+```
 ## utils.py
+```
 Usage: utils.py [OPTIONS]
 
   Helper functions shared across scripts.
@@ -47,3 +56,4 @@ Usage: utils.py [OPTIONS]
 Options:
   --help  Show this message and exit.
 
+```
