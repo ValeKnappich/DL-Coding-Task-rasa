@@ -1,0 +1,20 @@
+language: en
+
+pipeline:
+  - name: ConveRTTokenizer
+  - name: ConveRTFeaturizer
+    model_url: https://github.com/connorbrinton/polyai-models/releases/download/v1.0/model.tar.gz
+  - name: CountVectorsFeaturizer
+  - name: CountVectorsFeaturizer
+    analyzer: char_wb
+    min_ngram: 1
+    max_ngram: 4
+  - name: DIETClassifier
+    epochs: 50
+    use_masked_language_model: True
+    hidden_layers_sizes:
+      text: [512, 128]
+    embedding_dimension: 48
+    number_of_transformer_layers: 12
+    number_of_attention_heads: 8
+
