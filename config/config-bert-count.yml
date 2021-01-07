@@ -1,10 +1,14 @@
 language: en
 pipeline:
-- name: WhitespaceTokenizer
+- name: HFTransformersNLP
+  model_weights: "bert-base-uncased"
+  model_name: "bert"
+- name: LanguageModelTokenizer
+- name: LanguageModelFeaturizer
 - name: CountVectorsFeaturizer
 - name: CountVectorsFeaturizer
   analyzer: char_wb
   min_ngram: 1
   max_ngram: 4
 - name: DIETClassifier
-  epochs: 1
+  epochs: 10

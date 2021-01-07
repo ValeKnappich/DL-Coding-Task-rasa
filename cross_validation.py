@@ -26,8 +26,14 @@ def main(folds, data):
         results = rasa.nlu.cross_validate(nlu_data, n_folds=folds, nlu_config=join("config", config), disable_plotting=True)
         metrics[config] = read_metrics(results)
 
-    json.dump(metrics, open("CV-Results.json", "w"), indent=4)
-
+    try:
+        json.dump(metrics, open("CV-Results.json", "w"), indent=4)
+    except:
+        try:
+            import pickle
+            pickle.dump(metrics, open("CV.pkl", "wb"))
+        except:
+            import pdb; pdb.set_trace()
         
 
     
