@@ -18,12 +18,12 @@ def main(folds, data):
     """
     data = validate_data_path(data)
 
-    configs = list(os.listdir("../config"))
+    configs = list(os.listdir("config"))
     metrics = {}
     nlu_data = rasa.shared.nlu.training_data.loading.load_data(data)
     for config in configs:
         print(f"Starting to train {config}")
-        results = rasa.nlu.cross_validate(nlu_data, n_folds=folds, nlu_config=join("..", "config", config), disable_plotting=True)
+        results = rasa.nlu.cross_validate(nlu_data, n_folds=folds, nlu_config=join("config", config), disable_plotting=True)
         metrics[config] = read_metrics(results)
         
         # intentioanlly inside the loop, to save intermediate results
