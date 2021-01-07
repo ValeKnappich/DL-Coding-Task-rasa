@@ -1,0 +1,132 @@
+{
+    "config-count.yml": {
+        "train": {
+            "intent": {
+                "Accuracy": 1.0,
+                "F1-score": 1.0,
+                "Precision": 1.0
+            },
+            "entity": {
+                "Accuracy": 0.9816809700124111,
+                "F1-score": 0.9716585089280141,
+                "Precision": 0.9712891737499909
+            }
+        },
+        "test": {
+            "intent": {
+                "Accuracy": 0.9830100537261345,
+                "F1-score": 0.9829995066643812,
+                "Precision": 0.983014665533819
+            },
+            "entity": {
+                "Accuracy": 0.9044922912719832,
+                "F1-score": 0.8375013282113161,
+                "Precision": 0.8450944224488747
+            }
+        }
+    },
+    "config-convert-count.yml": {
+        "train": {
+            "intent": {
+                "Accuracy": 0.9999000649577775,
+                "F1-score": 0.999900064677111,
+                "Precision": 0.9999001694379531
+            },
+            "entity": {
+                "Accuracy": 0.9812520419073536,
+                "F1-score": 0.972186714734204,
+                "Precision": 0.969915141916368
+            }
+        },
+        "test": {
+            "intent": {
+                "Accuracy": 0.9851088244846401,
+                "F1-score": 0.9851539784072352,
+                "Precision": 0.9853691430668614
+            },
+            "entity": {
+                "Accuracy": 0.9333572147227249,
+                "F1-score": 0.8892954730986551,
+                "Precision": 0.8883003177741399
+            }
+        }
+    },
+    "config-bert-count.yml": {
+        "train": {
+            "intent": {
+                "Accuracy": 1.0,
+                "F1-score": 1.0,
+                "Precision": 1.0
+            },
+            "entity": {
+                "Accuracy": 0.9908537903800587,
+                "F1-score": 0.9879109682430739,
+                "Precision": 0.989772214732218
+            }
+        },
+        "test": {
+            "intent": {
+                "Accuracy": 0.9832101335423414,
+                "F1-score": 0.9831832724327056,
+                "Precision": 0.9832695261180099
+            },
+            "entity": {
+                "Accuracy": 0.9498149621791261,
+                "F1-score": 0.9167640660670564,
+                "Precision": 0.9245452396714141
+            }
+        }
+    },
+    "config-convert.yml": {
+        "train": {
+            "intent": {
+                "Accuracy": 0.9944533729237914,
+                "F1-score": 0.9944601703590491,
+                "Precision": 0.9945117457505316
+            },
+            "entity": {
+                "Accuracy": 0.9489151167144069,
+                "F1-score": 0.9146270691404119,
+                "Precision": 0.9146674587064236
+            }
+        },
+        "test": {
+            "intent": {
+                "Accuracy": 0.9843095238951268,
+                "F1-score": 0.9843482464965984,
+                "Precision": 0.9845108939710104
+            },
+            "entity": {
+                "Accuracy": 0.927777247680066,
+                "F1-score": 0.8785904074697236,
+                "Precision": 0.8811327312472264
+            }
+        }
+    },
+    "config-bert.yml": {
+        "train": {
+            "intent": {
+                "Accuracy": 0.9933539675972236,
+                "F1-score": 0.9933573736037671,
+                "Precision": 0.9933906771510511
+            },
+            "entity": {
+                "Accuracy": 0.9680013887443498,
+                "F1-score": 0.9486939738763799,
+                "Precision": 0.9497246151782776
+            }
+        },
+        "test": {
+            "intent": {
+                "Accuracy": 0.9804118923751554,
+                "F1-score": 0.9804342139102319,
+                "Precision": 0.9805593636171269
+            },
+            "entity": {
+                "Accuracy": 0.9429260970166911,
+                "F1-score": 0.9061081719013634,
+                "Precision": 0.909422825042205
+            }
+        }
+    }
+}
