@@ -1,0 +1,1 @@
+pip3 install rasa[transformers]==2.1
