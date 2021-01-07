@@ -4,7 +4,7 @@ import click
 import rasa
 import json
 
-from ..utils import validate_data_path, pipe_warnings_to_file, read_metrics
+from utils import validate_data_path, pipe_warnings_to_file, read_metrics
 
 pipe_warnings_to_file("warnings.log")
 
