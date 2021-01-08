@@ -1,0 +1,20 @@
+language: en
+pipeline:
+- name: HFTransformersNLP
+  model_weights: "bert-base-uncased"
+  model_name: "bert"
+- name: LanguageModelTokenizer
+- name: LanguageModelFeaturizer
+- name: CountVectorsFeaturizer
+- name: CountVectorsFeaturizer
+  analyzer: char_wb
+  min_ngram: 2
+  max_ngram: {max_char_ngram}
+- name: DIETClassifier
+  epochs: {epochs}
+  hidden_layers_sizes:
+    text: {ff_layers}
+  number_of_transformer_layers: {num_transformer_layers}
+  embedding_dimension: {embedding_dim}
+  transformer_size: {transformer_size}
+
