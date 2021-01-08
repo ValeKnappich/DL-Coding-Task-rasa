@@ -1,0 +1,28 @@
+{
+    "{'embedding_dim': 22.0, 'epochs': 49.0, 'ff_layers': '[256, 128]', 'max_char_ngram': 2.0, 'num_transformer_layers': 4.0, 'transformer_size': 512}": {
+        "train": {
+            "intent": {
+                "Accuracy": 1.0,
+                "F1-score": 1.0,
+                "Precision": 1.0
+            },
+            "entity": {
+                "Accuracy": 0.9980786065806112,
+                "F1-score": 0.9981090012759791,
+                "Precision": 0.9998364226662542
+            }
+        },
+        "test": {
+            "intent": {
+                "Accuracy": 0.9877070157966581,
+                "F1-score": 0.9877225839186776,
+                "Precision": 0.9878145904210496
+            },
+            "entity": {
+                "Accuracy": 0.9667869454110246,
+                "F1-score": 0.9462969972002143,
+                "Precision": 0.9462147072484179
+            }
+        }
+    }
+}
