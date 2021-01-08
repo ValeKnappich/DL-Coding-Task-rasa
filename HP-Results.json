@@ -50,5 +50,31 @@
                 "Precision": 0.9293781097527575
             }
         }
+    },
+    "{'embedding_dim': 23.0, 'epochs': 29.0, 'ff_layers': '[256]', 'max_char_ngram': 2.0, 'num_transformer_layers': 3.0, 'transformer_size': 512}": {
+        "train": {
+            "intent": {
+                "Accuracy": 1.0,
+                "F1-score": 1.0,
+                "Precision": 1.0
+            },
+            "entity": {
+                "Accuracy": 0.9980558860703291,
+                "F1-score": 0.9980923799281514,
+                "Precision": 0.9998586102026605
+            }
+        },
+        "test": {
+            "intent": {
+                "Accuracy": 0.9861083247345152,
+                "F1-score": 0.9861242350922622,
+                "Precision": 0.986163388964969
+            },
+            "entity": {
+                "Accuracy": 0.9655966324706075,
+                "F1-score": 0.9443850515445827,
+                "Precision": 0.946111000981221
+            }
+        }
     }
 }
