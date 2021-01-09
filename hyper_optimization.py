@@ -4,13 +4,12 @@ from hyperopt import hp, fmin, tpe, space_eval
 import rasa
 import click
 import json
+import git
 import os
 from os.path import isdir, join, dirname
-from contextlib import redirect_stdout
 
 
-
-# pipe_warnings_to_file("hp.log")
+pipe_warnings_to_file("hp.log")
 
 search_space = {
     "max_char_ngram": hp.quniform("max_char_ngram", 2, 4, 1),
@@ -34,11 +33,15 @@ config_tmp = "config/current-hp-conf.yml"
 nlu_data = None
 folds = None
 cv_results = {}
+repo = git.Repo(".")
 
 
-def dict_to_tuple(d):
-    # transform dict with literal values to tuple
-    return tuple((key, value) for key, value in d.items())
+def export_and_push_results():
+    global repo, cv_results
+    json.dump(cv_results, open("HP-Results.json", "w"))
+    repo.git.add("HP-Results.json")
+    repo.index.commit("Update HP Results")
+    repo.remote(name="origin").push()
 
 
 def export_config(args, file=config_tmp):
@@ -51,11 +54,10 @@ def target(args):
     global nlu_data, folds, config_tmp, cv_results
     export_config(args)
     data = rasa.shared.nlu.training_data.loading.load_data(nlu_data)
-    with open("hp.log", "w") as fp:
-        with redirect_stdout(fp):
-            results = rasa.nlu.cross_validate(data, n_folds=folds, nlu_config=config_tmp, disable_plotting=True)
+    data, _ = data.train_test_split(train_frac=0.005)
+    results = rasa.nlu.cross_validate(data, n_folds=folds, nlu_config=config_tmp, disable_plotting=True)
     metrics = read_metrics(results)
-    cv_results[dict_to_tuple(args)] = metrics
+    cv_results[str(args)] = metrics
     combined_score = (metrics["test"]["intent"]["Accuracy"] + metrics["test"]["entity"]["F1-score"]) / 2
     return 1 - combined_score
 
@@ -83,10 +85,10 @@ def cleanup():
 def main(config, out_config, data, folds, evals):
     global cv_results
     setup(config, data, folds)
-    best = fmin(target, search_space, algo=tpe.suggest, max_evals=evals)
+    best = fmin(target, search_space, algo=tpe.suggest, max_evals=evals, show_progressbar=False)
     export_config(space_eval(search_space, best), out_config)
     cleanup()
-    json.dump(cv_results, open("HP-Results.json", "w"))
+    
     
 
 if __name__ == "__main__":
