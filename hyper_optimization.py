@@ -37,7 +37,7 @@ repo = git.Repo(".")
 
 def export_and_push_results():
     global repo, cv_results
-    json.dump(cv_results, open("HP-Results.json", "w"))
+    json.dump(cv_results, open("HP-Results.json", "w"), indent=4)
     repo.git.add("HP-Results.json")
     repo.index.commit("Update HP Results")
     repo.remote(name="origin").push()
@@ -53,7 +53,7 @@ def target(args):
     global nlu_data, folds, config_tmp, cv_results
     export_config(args)
     data = rasa.shared.nlu.training_data.loading.load_data(nlu_data)
-    data, _ = data.train_test_split(train_frac=0.005)
+    data, _ = data.train_test_split(train_frac=0.01)
     results = rasa.nlu.cross_validate(data, n_folds=folds, nlu_config=config_tmp, disable_plotting=True)
     metrics = read_metrics(results)
     cv_results[str(args)] = metrics
