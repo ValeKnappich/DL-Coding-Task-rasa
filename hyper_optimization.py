@@ -13,8 +13,7 @@ pipe_warnings_to_file("hp.log")
 
 search_space = {
     "max_char_ngram": hp.quniform("max_char_ngram", 2, 4, 1),
-    # "epochs": hp.quniform("epochs", 8, 50, 1),
-    "epochs": hp.quniform("epochs", 1, 1, 1),
+    "epochs": hp.quniform("epochs", 8, 50, 1),
     "ff_layers": hp.choice("ff_layers", [
         "[]", "[128]", "[256]", "[128, 256]", "[256, 128]"
     ]),
@@ -58,6 +57,7 @@ def target(args):
     results = rasa.nlu.cross_validate(data, n_folds=folds, nlu_config=config_tmp, disable_plotting=True)
     metrics = read_metrics(results)
     cv_results[str(args)] = metrics
+    export_and_push_results()
     combined_score = (metrics["test"]["intent"]["Accuracy"] + metrics["test"]["entity"]["F1-score"]) / 2
     return 1 - combined_score
 
@@ -90,6 +90,5 @@ def main(config, out_config, data, folds, evals):
     cleanup()
     
     
-
 if __name__ == "__main__":
     main()
