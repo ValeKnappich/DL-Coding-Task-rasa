@@ -56,6 +56,22 @@ def read_metrics(results):
         } for mode in ("train", "test")
     }
 
+
+def import_rasa_functions():
+    """
+    Ugly helper function, that imports functions, that were not exposed by rasa
+    """
+    from os.path import join, dirname
+    import rasa
+    from importlib.util import spec_from_file_location, module_from_spec
+
+    path = join(dirname(rasa.nlu.__file__), "test.py")
+    spec = spec_from_file_location("rasa.nlu.test", path)
+    module = module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.get_eval_data, module.evaluate_intents, module.evaluate_entities
+
+
 @click.command()
 def main():
     """

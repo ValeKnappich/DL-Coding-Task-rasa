@@ -8,8 +8,16 @@ import json
 from os.path import isfile
 
 @click.command()
-def plot():
+@click.option("-h", "--hyper", is_flag=True)
+def plot(hyper):
     """Plot the CV results"""
+    if hyper:
+        plot_hyper()
+    else:
+        plot_cv()
+
+
+def plot_cv():
     if not isfile("CV-Results.json"):
         raise FileNotFoundError(f"{join(os.getcwd(), 'CV-Results.json')} does not exist, run cross-validation first.")
 
@@ -27,6 +35,24 @@ def plot():
         facet_col="Task", facet_row="Mode", log_y=True
     )
     fig.write_image("CV-Results.png")
+
+
+def plot_hyper():
+    if not isfile("HP-Results.json"):
+        raise FileNotFoundError(f"{join(os.getcwd(), 'HP-Results.json')} does not exist, run hyper opt first.")
+
+    data = json.load(open("HP-Results.json", "r"))
+    data_list = []
+    hp_names = []
+    for hp_str in data:
+        hp = json.loads(hp_str.replace("'", '"')) # turn string to dict
+        if not hp_names:
+            hp_names = list(hp.keys())
+        score = data[hp_str]["test"]["entity"]["F1-score"]
+        data_list.append([*hp.values(), score])
+    
+    df = pd.DataFrame(data_list, columns=[*hp_names, "Score"])
+    print(df)
 
 if __name__ == "__main__":
     plot()

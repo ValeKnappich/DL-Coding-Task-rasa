@@ -1,13 +1,15 @@
-from utils import validate_data_path, read_metrics, pipe_warnings_to_file
+from utils import validate_data_path, read_metrics, pipe_warnings_to_file, import_rasa_functions
 
-from hyperopt import hp, fmin, tpe, space_eval
+from hyperopt import hp, fmin, tpe, space_eval, Trials
 import rasa
 import click
 import json
+import pickle
 import git
 import os
-from os.path import isdir, join, dirname
+from os.path import isdir, join, dirname, isfile
 
+run_prediction, eval_intents, eval_entities = import_rasa_functions()
 
 pipe_warnings_to_file("hp.log")
 
@@ -30,18 +32,25 @@ config_template = None
 config_out = None
 config_tmp = "config/current-hp-conf.yml"
 nlu_data = None
-folds = None
-cv_results = {}
+test_results = {}
 repo = git.Repo(".")
 
 
-def export_and_push_results():
-    global repo, cv_results
-    old_results = json.load(open("HP-Results.json", "r"))
-    json.dump(dict(old_results, **cv_results), open("HP-Results.json", "w"), indent=4)
-    repo.git.add("HP-Results.json")
-    repo.index.commit("Update HP Results")
+def git_push(file, message)
+    global repo
+    repo.git.add(file)
+    repo.index.commit(message)
     repo.remote(name="origin").push()
+
+
+def export_and_push_results():
+    global test_results
+    if isfile("HP-Results.json"):
+        old_results = json.load(open("HP-Results.json", "r"))
+    else:
+        old_results = {}
+    json.dump(dict(old_results, **test_results), open("HP-Results.json", "w"), indent=4)
+    git_push("HP-Results.json", "Update HP Results")
 
 
 def export_config(args, file=config_tmp):
@@ -51,24 +60,34 @@ def export_config(args, file=config_tmp):
 
 
 def target(args):
-    global nlu_data, folds, config_tmp, cv_results
+    global nlu_data, config_tmp, test_results
     export_config(args)
     data = rasa.shared.nlu.training_data.loading.load_data(nlu_data)
     # data, _ = data.train_test_split(train_frac=0.01)
-    results = rasa.nlu.cross_validate(data, n_folds=folds, nlu_config=config_tmp, disable_plotting=True)
-    metrics = read_metrics(results)
-    cv_results[str(args)] = metrics
+    train, test = data.train_test_split(train_frac=0.7)
+    trainer = rasa.nlu.model.Trainer(rasa.nlu.config.load(config_tmp))
+    interpreter = trainer.train(train)
+    i_results, e_results, _ = run_prediction(interpreter, test)
+    i_eval = eval_intents(i_results, None, False, False, True, True), 
+    e_eval = eval_entities(e_results, {"DIETClassifier"}, None, False, False, True, True)
+    metrics = {
+        "intent": {
+            metric: i_eval[metric] for metric in ["precision", "f1_score", "accuracy"]
+        }, "entity": {
+            metric: i_eval["DIETClassifier"][metric] for metric in ["precision", "f1_score", "accuracy"]
+        }
+    }
+    test_results[str(args)] = metrics
     export_and_push_results()
-    combined_score = (metrics["test"]["intent"]["Accuracy"] + metrics["test"]["entity"]["F1-score"]) / 2
+    combined_score = (metrics["intent"]["accuracy"] + metrics["entity"]["f1_score"]) / 2
     return 1 - combined_score
 
 
-def setup(config, data_path, n_folds):
-    global config_template, nlu_data, folds
+def setup(config, data_path):
+    global config_template, nlu_data
     with open(config, "r") as fp:
         config_template = fp.read()
     nlu_data = validate_data_path(data_path)
-    folds = n_folds
 
 
 def cleanup():
@@ -81,13 +100,17 @@ def cleanup():
 @click.option("-c", "--config", default="config/hp-template.yml")
 @click.option("-o", "--out-config", default="config/config-best-hp.yml")
 @click.option("-d", "--data", default="data")
-@click.option("-f", "--folds", default=3, type=int)
 @click.option("-e", "--evals", default=20, type=int)
-def main(config, out_config, data, folds, evals):
-    global cv_results
-    setup(config, data, folds)
-    best = fmin(target, search_space, algo=tpe.suggest, max_evals=evals, show_progressbar=False)
+def main(config, out_config, data,evals):
+    setup(config, data)
+    if isfile("hp-trials.pkl"):
+        trials = pickle.load(open("hp-trials.pkl", "rb"))
+    else:
+        trials = Trials()
+    best = fmin(target, search_space, trials=trials, algo=tpe.suggest, max_evals=len(trials.trials) + evals, show_progressbar=False)
     export_config(space_eval(search_space, best), out_config)
+    pickle.dump(trials, open("hp-trials.pkl", "wb"))
+    git_push("hp-trials.pkl", "Update HP Results")
     cleanup()
     
     
