@@ -37,7 +37,8 @@ repo = git.Repo(".")
 
 def export_and_push_results():
     global repo, cv_results
-    json.dump(cv_results, open("HP-Results.json", "w"), indent=4)
+    old_results = json.load(open("HP-Results.json", "r"))
+    json.dump(dict(old_results, **cv_results), open("HP-Results.json", "w"), indent=4)
     repo.git.add("HP-Results.json")
     repo.index.commit("Update HP Results")
     repo.remote(name="origin").push()
