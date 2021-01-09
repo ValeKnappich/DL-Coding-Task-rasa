@@ -75,7 +75,7 @@ def target(args):
         "intent": {
             metric: i_eval[metric] for metric in ["precision", "f1_score", "accuracy"]
         }, "entity": {
-            metric: i_eval["DIETClassifier"][metric] for metric in ["precision", "f1_score", "accuracy"]
+            metric: e_eval["DIETClassifier"][metric] for metric in ["precision", "f1_score", "accuracy"]
         }
     }
     test_results[str(args)] = metrics
