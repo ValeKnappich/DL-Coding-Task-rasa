@@ -63,7 +63,7 @@ def target(args):
     global nlu_data, config_tmp, test_results
     export_config(args)
     data = rasa.shared.nlu.training_data.loading.load_data(nlu_data)
-    data, _ = data.train_test_split(train_frac=0.1)
+    # data, _ = data.train_test_split(train_frac=0.1)
     train, test = data.train_test_split(train_frac=0.7)
     trainer = rasa.nlu.model.Trainer(rasa.nlu.config.load(config_tmp))
     interpreter = trainer.train(train)
