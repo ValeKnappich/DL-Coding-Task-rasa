@@ -1,1 +1,106 @@
-{"{'embedding_dim': 21.0, 'epochs': 38.0, 'ff_layers': '[128]', 'max_char_ngram': 3.0, 'num_transformer_layers': 3.0, 'transformer_size': 128}": {"train": {"intent": {"Accuracy": 0.9751243781094527, "F1-score": 0.9744228410972092, "Precision": 0.9790441730740239}, "entity": {"Accuracy": 0.6170562521207685, "F1-score": 0.3373627322566664, "Precision": 0.5441751277443355}}, "test": {"intent": {"Accuracy": 0.8398692810457516, "F1-score": 0.8132689255683907, "Precision": 0.8347636024106612}, "entity": {"Accuracy": 0.5117103207425787, "F1-score": 0.10964750546634539, "Precision": 0.20277489849832642}}}}
+{
+    "{'embedding_dim': 22.0, 'epochs': 49.0, 'ff_layers': '[256, 128]', 'max_char_ngram': 2.0, 'num_transformer_layers': 4.0, 'transformer_size': 512}": {
+        "train": {
+            "intent": {
+                "Accuracy": 1.0,
+                "F1-score": 1.0,
+                "Precision": 1.0
+            },
+            "entity": {
+                "Accuracy": 0.9980786065806112,
+                "F1-score": 0.9981090012759791,
+                "Precision": 0.9998364226662542
+            }
+        },
+        "test": {
+            "intent": {
+                "Accuracy": 0.9877070157966581,
+                "F1-score": 0.9877225839186776,
+                "Precision": 0.9878145904210496
+            },
+            "entity": {
+                "Accuracy": 0.9667869454110246,
+                "F1-score": 0.9462969972002143,
+                "Precision": 0.9462147072484179
+            }
+        }
+    },
+    "{'embedding_dim': 22.0, 'epochs': 28.0, 'ff_layers': '[]', 'max_char_ngram': 3.0, 'num_transformer_layers': 3.0, 'transformer_size': 128}": {
+        "train": {
+            "intent": {
+                "Accuracy": 1.0,
+                "F1-score": 1.0,
+                "Precision": 1.0
+            },
+            "entity": {
+                "Accuracy": 0.9975898385928325,
+                "F1-score": 0.9973507408375673,
+                "Precision": 0.9988538196118082
+            }
+        },
+        "test": {
+            "intent": {
+                "Accuracy": 0.981111093134488,
+                "F1-score": 0.9811424334663261,
+                "Precision": 0.9812462041598803
+            },
+            "entity": {
+                "Accuracy": 0.9534130677016209,
+                "F1-score": 0.9232287107597834,
+                "Precision": 0.9293781097527575
+            }
+        }
+    },
+    "{'embedding_dim': 23.0, 'epochs': 29.0, 'ff_layers': '[256]', 'max_char_ngram': 2.0, 'num_transformer_layers': 3.0, 'transformer_size': 512}": {
+        "train": {
+            "intent": {
+                "Accuracy": 1.0,
+                "F1-score": 1.0,
+                "Precision": 1.0
+            },
+            "entity": {
+                "Accuracy": 0.9980558860703291,
+                "F1-score": 0.9980923799281514,
+                "Precision": 0.9998586102026605
+            }
+        },
+        "test": {
+            "intent": {
+                "Accuracy": 0.9861083247345152,
+                "F1-score": 0.9861242350922622,
+                "Precision": 0.986163388964969
+            },
+            "entity": {
+                "Accuracy": 0.9655966324706075,
+                "F1-score": 0.9443850515445827,
+                "Precision": 0.946111000981221
+            }
+        }
+    },
+    "{'embedding_dim': 22.0, 'epochs': 39.0, 'ff_layers': '[128]', 'max_char_ngram': 3.0, 'num_transformer_layers': 4.0, 'transformer_size': 512}": {
+        "train": {
+            "intent": {
+                "Accuracy": 0.9400723654454998,
+                "F1-score": 0.9267657875277672,
+                "Precision": 0.9527350457472573
+            },
+            "entity": {
+                "Accuracy": 0.9674480799157367,
+                "F1-score": 0.9568498268321527,
+                "Precision": 0.9822202829357548
+            }
+        },
+        "test": {
+            "intent": {
+                "Accuracy": 0.7293523469994058,
+                "F1-score": 0.6878281156356022,
+                "Precision": 0.7298215582529308
+            },
+            "entity": {
+                "Accuracy": 0.694356316746893,
+                "F1-score": 0.40872800970058715,
+                "Precision": 0.49150119988424984
+            }
+        }
+    }
+}
