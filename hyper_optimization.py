@@ -36,7 +36,7 @@ test_results = {}
 repo = git.Repo(".")
 
 
-def git_push(file, message)
+def git_push(file, message):
     global repo
     repo.git.add(file)
     repo.index.commit(message)
@@ -63,13 +63,14 @@ def target(args):
     global nlu_data, config_tmp, test_results
     export_config(args)
     data = rasa.shared.nlu.training_data.loading.load_data(nlu_data)
-    # data, _ = data.train_test_split(train_frac=0.01)
+    data, _ = data.train_test_split(train_frac=0.1)
     train, test = data.train_test_split(train_frac=0.7)
     trainer = rasa.nlu.model.Trainer(rasa.nlu.config.load(config_tmp))
     interpreter = trainer.train(train)
-    i_results, e_results, _ = run_prediction(interpreter, test)
-    i_eval = eval_intents(i_results, None, False, False, True, True), 
+    i_results, _, e_results = run_prediction(interpreter, test)
+    i_eval = eval_intents(i_results, None, False, False, True, True)
     e_eval = eval_entities(e_results, {"DIETClassifier"}, None, False, False, True, True)
+    import pdb; pdb.set_trace()
     metrics = {
         "intent": {
             metric: i_eval[metric] for metric in ["precision", "f1_score", "accuracy"]
