@@ -112,6 +112,7 @@ def main(config, out_config, data,evals):
     setup(config, data, trials)
     best = fmin(target, search_space, trials=trials, algo=tpe.suggest, max_evals=len(trials.trials) + evals, show_progressbar=False)
     export_config(space_eval(search_space, best), out_config)
+    git_push(out_config, msg="best config")
     cleanup()
     
     
