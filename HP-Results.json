@@ -298,5 +298,17 @@
             "f1_score": 0.9420196740366895,
             "accuracy": 0.9648725842946697
         }
+    },
+    "{'embedding_dim': 29.0, 'epochs': 43.0, 'ff_layers': '[128, 256]', 'max_char_ngram': 2.0, 'num_transformer_layers': 4.0, 'transformer_size': 512}": {
+        "intent": {
+            "precision": 0.9850919329394289,
+            "f1_score": 0.9850394133148671,
+            "accuracy": 0.9850099933377748
+        },
+        "entity": {
+            "precision": 0.9465764678332,
+            "f1_score": 0.9463523518914954,
+            "accuracy": 0.9674721533508492
+        }
     }
 }
