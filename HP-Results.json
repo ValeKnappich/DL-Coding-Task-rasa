@@ -1,0 +1,14 @@
+{
+    "{'embedding_dim': 38.0, 'epochs': 24.0, 'ff_layers': '[256, 128]', 'max_char_ngram': 4.0, 'num_transformer_layers': 3.0, 'transformer_size': 128}": {
+        "intent": {
+            "precision": 0.977230413487682,
+            "f1_score": 0.9771641546042824,
+            "accuracy": 0.977348434377082
+        },
+        "entity": {
+            "precision": 0.9319965090147603,
+            "f1_score": 0.9280728583460497,
+            "accuracy": 0.9562976243836845
+        }
+    }
+}
