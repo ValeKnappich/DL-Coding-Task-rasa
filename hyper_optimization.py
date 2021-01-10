@@ -36,21 +36,23 @@ test_results = {}
 repo = git.Repo(".")
 
 
-def git_push(file, message):
+def git_push(*files, msg="hp update"):
     global repo
-    repo.git.add(file)
+    for file in files:
+        repo.git.add(file)
     repo.index.commit(message)
     repo.remote(name="origin").push()
 
-
+    
 def export_and_push_results():
-    global test_results
+    global test_results, trials
     if isfile("HP-Results.json"):
         old_results = json.load(open("HP-Results.json", "r"))
     else:
         old_results = {}
     json.dump(dict(old_results, **test_results), open("HP-Results.json", "w"), indent=4)
-    git_push("HP-Results.json", "Update HP Results")
+    pickle.dump(trials, open("hp-trials.pkl", "wb"))
+    git_push("HP-Results.json", "hp-trials.pkl", msg="Update HP Results")
 
 
 def export_config(args, file=config_tmp):
@@ -70,7 +72,6 @@ def target(args):
     i_results, _, e_results = run_prediction(interpreter, test)
     i_eval = eval_intents(i_results, None, False, False, True, True)
     e_eval = eval_entities(e_results, {"DIETClassifier"}, None, False, False, True, True)
-    import pdb; pdb.set_trace()
     metrics = {
         "intent": {
             metric: i_eval[metric] for metric in ["precision", "f1_score", "accuracy"]
@@ -84,15 +85,16 @@ def target(args):
     return 1 - combined_score
 
 
-def setup(config, data_path):
-    global config_template, nlu_data
+def setup(config, data_path, trials_obj):
+    global config_template, nlu_data, trials
     with open(config, "r") as fp:
         config_template = fp.read()
     nlu_data = validate_data_path(data_path)
+    trials = trials_obj
 
 
 def cleanup():
-    to_delete = [config_tmp] #, "data/tmp*"]
+    to_delete = [config_tmp]
     for file in to_delete:
         os.system(f"rm -f {file}")
 
@@ -103,15 +105,13 @@ def cleanup():
 @click.option("-d", "--data", default="data")
 @click.option("-e", "--evals", default=20, type=int)
 def main(config, out_config, data,evals):
-    setup(config, data)
     if isfile("hp-trials.pkl"):
         trials = pickle.load(open("hp-trials.pkl", "rb"))
     else:
         trials = Trials()
+    setup(config, data, trials)
     best = fmin(target, search_space, trials=trials, algo=tpe.suggest, max_evals=len(trials.trials) + evals, show_progressbar=False)
     export_config(space_eval(search_space, best), out_config)
-    pickle.dump(trials, open("hp-trials.pkl", "wb"))
-    git_push("hp-trials.pkl", "Update HP Results")
     cleanup()
     
     
