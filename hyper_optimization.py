@@ -40,7 +40,7 @@ def git_push(*files, msg="hp update"):
     global repo
     for file in files:
         repo.git.add(file)
-    repo.index.commit(message)
+    repo.index.commit(msg)
     repo.remote(name="origin").push()
 
     
