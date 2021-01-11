@@ -3,22 +3,8 @@ import rasa
 import json
 import os
 from os.path import isdir, join
-from datetime import datetime
 from tqdm import tqdm
-
-def validate_model_path(model):
-    if not model:
-        models = os.listdir("model")
-        dates = [datetime.strptime(model[4:], "%Y%m%d-%H%M%S") for model in models]
-        return join("model", models[dates.index(max(dates))])
-    elif not isdir(model):
-        if isdir(join("model", model)):
-            return join("model", model)
-        else:
-            raise ValueError("Model does not exist")
-    else:
-        return model
-
+from utils import validate_model_path
 
 @click.command()
 @click.option("-d", "--data", "path", default="data/dev.json", help="Path to dev.json")

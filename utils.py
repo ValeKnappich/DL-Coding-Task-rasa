@@ -2,6 +2,8 @@ import os
 from os.path import isfile, isdir, join
 import warnings
 import click
+from datetime import datetime
+
 
 def validate_config(config):
     if not config:
@@ -34,6 +36,20 @@ def validate_data_path(path):
     else:
         raise ValueError(f"No such file or directory: {join(os.getcwd(), path)}")
 
+
+def validate_model_path(model):
+    if not model:
+        models = os.listdir("model")
+        dates = [datetime.strptime(model[4:], "%Y%m%d-%H%M%S") for model in models]
+        return join("model", models[dates.index(max(dates))])
+    elif not isdir(model):
+        if isdir(join("model", model)):
+            return join("model", model)
+        else:
+            raise ValueError("Model does not exist")
+    else:
+        return model
+        
 
 def pipe_warnings_to_file(file):
     logs_fp = open(file, "w")
