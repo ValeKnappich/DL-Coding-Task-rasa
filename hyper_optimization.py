@@ -29,7 +29,6 @@ types = { # default: int
 }
 
 config_template = None
-config_out = None
 config_tmp = "config/current-hp-conf.yml"
 nlu_data = None
 test_results = {}
