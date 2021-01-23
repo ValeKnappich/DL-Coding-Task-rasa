@@ -35,29 +35,41 @@ def convert_to_yaml(file_out, train_by_intents, all_intents):
         fp.write(f"    - {format_instance(instance)}\n")
 
 
-def check_problems(train_by_intents):
+def check_problems(train_by_intents, clean):
     problem_names = ["Overlapping Entities", "Dot in Entity", 
                     "Trailing whitespace in Entity", 
                     "Entity value doesnt match Span"]
     problems = {problem: [] for problem in problem_names}
     problem_counts = {problem: 0 for problem in problem_names}
+    cleaned = {}
     for intent, instances in train_by_intents.items():
+        cleaned[intent] = []
         for instance in instances:
+            problem = False
             if overlap(instance["positions"]):
                 problems["Overlapping Entities"].append((instance["id"], None))
                 problem_counts["Overlapping Entities"] += 1
-            for entity, (start, stop) in zip(instance["slots"].values(), instance["positions"].values()):
+                problem = True
+            for (entity_name, entity), (start, stop) in zip(instance["slots"].items(), instance["positions"].values()):
                 if "." in entity:
                     problems["Dot in Entity"].append((instance["id"], entity))
                     problem_counts["Dot in Entity"] += 1
+                    problem = True
                 elif entity.startswith(" "):
                     problems["Trailing whitespace in Entity"].append((instance["id"], entity))
                     problem_counts["Trailing whitespace in Entity"] += 1
+                    problem = True
                 elif entity != instance["text"][start:stop+1]:
                     problems["Entity value doesnt match Span"].append((instance["id"], entity))
                     problem_counts["Entity value doesnt match Span"] += 1
+                    problem = True
+            if not clean:
+                # include in training data
+                problem = False
+            if not problem:
+                cleaned[intent].append(instance)
     print(problem_counts)
-    return problems
+    return cleaned, problems
 
 
 def overlap(positions):
@@ -65,7 +77,7 @@ def overlap(positions):
         set1 = set(range(start1, stop1+1))
         set2 = set(range(start2, stop2+1))
         if set1.intersection(set2):
-            import pdb; pdb.set_trace()
+            return True
     return False
 
 
@@ -74,9 +86,10 @@ def overlap(positions):
 @click.option("-o", "--output", "file_out", default="data/train.yml", help="Output file in yaml format")
 @click.option("-c", "--check-only", default=False, is_flag=True, help="Only check for trailing whitespaces and dots inside of entities and not output yaml")
 @click.option("-s", "--save-check", default=False, is_flag=True, help="Save check results to disk")
-def main(file_in, file_out, check_only, save_check):
+@click.option("--clean", default=False, is_flag=True, help="Exclude sample from dataset if a problem is found")
+def main(file_in, file_out, check_only, save_check, clean):
     all_intents, train_by_intents = load_and_transform(file_in)
-    check_results = check_problems(train_by_intents)
+    train_by_intents, check_results = check_problems(train_by_intents, clean)
     if save_check:
         json.dump(check_results, open("data/check_results.json", "w"), indent=2)
     if not check_only:
