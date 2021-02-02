@@ -21,7 +21,7 @@ def main(path, model, out_path):
         data[index]["positions"] = {entity["entity"]: [entity["start"], entity["end"]] for entity in pred["entities"]}
         data[index]["slots"] = {entity["entity"]: entity["value"] for entity in pred["entities"]}
 
-    json.dump(data, open(out_path, "w"), indent=4)
+    json.dump(data, open(out_path, "w", encoding="utf-8"), indent=4, ensure_ascii=False)
 
 if __name__ == "__main__":
     main()
